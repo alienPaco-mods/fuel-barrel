@@ -1,0 +1,9 @@
+name=Fuel Barrel
+id=FuelBarrel
+author=alienPaco
+modversion=0.4.1
+versionMin=42.20
+description=Weld a 120 L steel barrel, or a rough 60 L one, and attach it to a generator with a rubber hose for a much bigger fuel supply. B42 prototype.
+icon=icon.png
+pack=fuelbarrel
+tiledef=fuelbarrel 5128

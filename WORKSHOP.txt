@@ -1,0 +1,57 @@
+[h1]Fuel Barrel[/h1]
+
+A generator's tank holds 10 L, and somebody has to keep coming back to fill it. Weld a steel Fuel Barrel, hose it to the generator, and let the barrel keep the tank topped up. It keeps working while you are away, so the freezer at the base you left behind stays cold.
+
+[b]Build 42 only (42.20 or newer). This is an early release, so back up your save before enabling it. Singleplayer only: multiplayer is not supported.[/b]
+
+[h2]Features[/h2]
+[list]
+[*]Two barrels: a 120 L Fuel Barrel (twelve tankfuls) and a rough 60 L Crude Fuel Barrel you can weld early
+[*]Connect with a rubber hose and pliers, on any of the four vanilla generators, running or not
+[*]The barrel shows next to the generator, and its level shows in Generator Info
+[*]Fill it with vanilla's own liquid menu, from any gas can
+[*]Keeps paying while you're away: come back to a generator that's still running, with the fuel and the wear taken for the hours you were gone
+[*]Disconnect any time to move the barrel to another generator
+[*]Both barrel sizes can be changed in the sandbox options
+[/list]
+
+[h2]The barrels[/h2]
+Both are welded from the crafting menu at a table or counter, with a welding mask (kept).
+[list]
+[*][b]Fuel Barrel[/b], Welding 6: 4 blowtorch uses, 4 sheet metal, 4 welding rods. Holds 120 L, weighs 15 empty.
+[*][b]Crude Fuel Barrel[/b], Welding 4: 2 blowtorch uses, 2 sheet metal, 2 welding rods. Holds 60 L, weighs 8 empty.
+[/list]
+
+[h2]How it works[/h2]
+[olist]
+[*]Carry the barrel, a [b]Rubber Hose[/b] and [b]pliers[/b]. Right-click the generator and pick [b]Connect Fuel Barrel[/b]. The hose is used up, the pliers are kept. The barrel must be empty or hold only gasoline.
+[*]Right-click the generator, open the [b]Fuel Barrel[/b] submenu and pour gasoline in. A connected barrel takes nothing else.
+[*]Every in-game minute the barrel refills the generator's 10 L tank.
+[*]To move it, drain the barrel and pick [b]Disconnect Fuel Barrel[/b] (pliers again). You get the barrel and the hose back.
+[/olist]
+
+[h2]While you're away[/h2]
+When you return, vanilla bills the generator's own tank for the hours you were gone and shuts it off if the tank runs dry. The barrel then pays the rest and starts it again, so you find it running as if it had never stopped. The wear it would have taken is counted too. If the barrel ran out as well, you find it off and empty.
+
+[h2]Good to know[/h2]
+[list]
+[*]A gas pump fills a barrel you carry, but a litre of fuel weighs 1, so a full 120 L barrel weighs 135. Filling gas cans at the pump and pouring them into the connected barrel is far easier.
+[*]A generator can't be picked up while a barrel is connected.
+[*]If the generator is destroyed, the barrel and its fuel go with it.
+[*]No vanilla recipe, item or loot table is changed.
+[*]The tiledef number 5128 must be unique among your active mods.
+[/list]
+
+[h2]Sandbox options[/h2]
+Fuel Barrel capacity (default 120 L) and Crude Fuel Barrel capacity (default 60 L), from 20 to 500 L. A barrel keeps the size it was crafted with, even after it's disconnected and moved.
+
+[h2]A little history[/h2]
+Real standby generators work the same way. A small "day tank" sits right beside the engine, and a big bulk tank keeps it filled. The small tank stays close and quick to feed, and the big one holds the reserve.
+
+[h2]Known limitations[/h2]
+[list]
+[*]Multiplayer is not supported. This mod is singleplayer only for now.
+[*]The generator's own tank stays at 10 L, because the game fixes it. The barrel adds its fuel on top.
+[/list]
+
+Bug reports are welcome in the comments. Please include any repeating errors from your console.txt.

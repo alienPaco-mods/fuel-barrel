@@ -1,0 +1,90 @@
+module FuelBarrel
+{
+    model FuelBarrelGround
+    {
+        mesh = FuelBarrel,
+        texture = FuelBarrelModel,
+        scale = 0.54,
+    }
+
+    model CrudeFuelBarrelGround
+    {
+        mesh = CrudeFuelBarrel,
+        texture = CrudeFuelBarrelModel,
+        scale = 0.54,
+    }
+
+    item FuelBarrel
+    {
+        DisplayCategory = Tool,
+        ItemType = base:normal,
+        Weight = 15.0,
+        Icon = FuelBarrel,
+        Tooltip = Tooltip_FuelBarrel,
+        WorldStaticModel = FuelBarrel.FuelBarrelGround,
+        component FluidContainer
+        {
+            ContainerName = FuelBarrel,
+            Capacity = 120.0,
+        }
+    }
+
+    item CrudeFuelBarrel
+    {
+        DisplayCategory = Tool,
+        ItemType = base:normal,
+        Weight = 8.0,
+        Icon = CrudeFuelBarrel,
+        Tooltip = Tooltip_CrudeFuelBarrel,
+        WorldStaticModel = FuelBarrel.CrudeFuelBarrelGround,
+        component FluidContainer
+        {
+            ContainerName = CrudeFuelBarrel,
+            Capacity = 60.0,
+        }
+    }
+
+    craftRecipe MakeFuelBarrel
+    {
+        OnCreate = FuelBarrel.onCreateBarrel,
+        timedAction = Welding,
+        time = 250,
+        SkillRequired = MetalWelding:6,
+        Tags = AnySurfaceCraft;Welding,
+        category = Metalworking,
+        xpAward = MetalWelding:60,
+        inputs
+        {
+            item 1 tags[base:weldingmask] mode:keep,
+            item 4 [Base.BlowTorch],
+            item 4 [Base.SheetMetal],
+            item 4 [Base.WeldingRods],
+        }
+        outputs
+        {
+            item 1 FuelBarrel.FuelBarrel,
+        }
+    }
+
+    craftRecipe MakeCrudeFuelBarrel
+    {
+        OnCreate = FuelBarrel.onCreateBarrel,
+        timedAction = Welding,
+        time = 150,
+        SkillRequired = MetalWelding:4,
+        Tags = AnySurfaceCraft;Welding,
+        category = Metalworking,
+        xpAward = MetalWelding:30,
+        inputs
+        {
+            item 1 tags[base:weldingmask] mode:keep,
+            item 2 [Base.BlowTorch],
+            item 2 [Base.SheetMetal],
+            item 2 [Base.WeldingRods],
+        }
+        outputs
+        {
+            item 1 FuelBarrel.CrudeFuelBarrel,
+        }
+    }
+}

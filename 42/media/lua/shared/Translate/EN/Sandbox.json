@@ -1,0 +1,7 @@
+{
+  "Sandbox_FuelBarrel": "Fuel Barrel",
+  "Sandbox_FuelBarrel_Capacity": "Fuel Barrel capacity (L)",
+  "Sandbox_FuelBarrel_Capacity_tooltip": "How much a Fuel Barrel holds. Barrels already made keep their size.",
+  "Sandbox_FuelBarrel_CrudeCapacity": "Crude Fuel Barrel capacity (L)",
+  "Sandbox_FuelBarrel_CrudeCapacity_tooltip": "How much a Crude Fuel Barrel holds. Barrels already made keep their size."
+}

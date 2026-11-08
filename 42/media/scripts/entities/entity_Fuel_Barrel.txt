@@ -1,0 +1,30 @@
+module FuelBarrel
+{
+    /* Only so barrels placed with 0.1.0 still load. The barrel is now an item. */
+    entity Fuel_Barrel
+    {
+        component UiConfig
+        {
+            xuiSkin = default,
+            entityStyle = ES_FuelBarrel,
+            uiEnabled = false,
+        }
+        component FluidContainer
+        {
+            ContainerName = FuelBarrel,
+            Capacity = 120.0,
+            InitialPercentMin = 0.0,
+            InitialPercentMax = 0.0,
+        }
+        component SpriteConfig
+        {
+            face S
+            {
+                layer
+                {
+                    row = fuelbarrel_01_0,
+                }
+            }
+        }
+    }
+}

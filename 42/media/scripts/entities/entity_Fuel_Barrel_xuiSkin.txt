@@ -1,0 +1,12 @@
+module Base
+{
+    xuiSkin default
+    {
+        entity ES_FuelBarrel
+        {
+            LuaWindowClass = ISEntityWindow,
+            DisplayName = FuelBarrel,
+            Icon = Build_RainCollectorBarrel2,
+        }
+    }
+}

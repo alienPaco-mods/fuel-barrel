@@ -1,0 +1,15 @@
+{
+  "ContextMenu_FuelBarrel": "Fuel Barrel",
+  "ContextMenu_FuelBarrel_Connect": "Connect Fuel Barrel",
+  "ContextMenu_FuelBarrel_Disconnect": "Disconnect Fuel Barrel",
+  "ContextMenu_FuelBarrel_Transfer": "Fuel Barrel: Transfer Liquid",
+  "ContextMenu_FuelBarrel_NeedHose": "Needs a rubber hose.",
+  "ContextMenu_FuelBarrel_NeedPliers": "Needs pliers.",
+  "ContextMenu_FuelBarrel_NotFuel": "The barrel must be empty or hold only gasoline.",
+  "ContextMenu_FuelBarrel_HasFuel": "The barrel must be empty before it can be disconnected.",
+  "ContextMenu_FuelBarrel_DisconnectFirst": "Disconnect the fuel barrel first.",
+  "ContextMenu_CrudeFuelBarrel": "Crude Fuel Barrel",
+  "ContextMenu_CrudeFuelBarrel_Connect": "Connect Crude Fuel Barrel",
+  "ContextMenu_CrudeFuelBarrel_Disconnect": "Disconnect Crude Fuel Barrel",
+  "ContextMenu_CrudeFuelBarrel_Transfer": "Crude Fuel Barrel: Transfer Liquid"
+}
