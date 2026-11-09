@@ -9,20 +9,22 @@ so vanilla still sees its own sprite. Each style's item icon is written alongsid
 Usage: python3 tools/build_tileset.py [path/to/ProjectZomboid/projectzomboid]
 Needs Pillow. Rerun after editing the tables or colours below.
 """
-import io
 import math
+import os
 import random
-import struct
 import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter
 
+sys.path.insert(0, str(Path(os.environ.get("TPCORE", Path(__file__).resolve().parents[2] / "_tpcore")) / "tools"))
+import pzart  # noqa: E402
+from pzart import shrink  # noqa: E402
+
 NAME = "fuelbarrel"
 TILESET = NAME + "_01"
 COLUMNS, ROWS = 8, 5
 PAGE_SIZE = 1024
-TILE_W, TILE_H = 128, 256
 SUPERSAMPLE = 4
 GENERATOR_PREFIX = "appliances_misc_01_"
 GENERATOR_SPRITES = 16
@@ -164,47 +166,6 @@ for style in STYLES:
         TILE_PROPS[style["overlay_base"] + sprite_index] = [("CustomName", "Generator Barrel")]
 
 
-def read_string(f):
-    (length,) = struct.unpack("<I", f.read(4))
-    return f.read(length).decode("utf8", "replace")
-
-
-def write_string(out, value):
-    data = value.encode("utf8")
-    out.write(struct.pack("<I", len(data)))
-    out.write(data)
-
-
-def extract_sprites(pack_path, wanted):
-    """Returns {sprite name: full-size RGBA tile image}."""
-    found = {}
-    with open(pack_path, "rb") as f:
-        if f.read(4) != b"PZPK":
-            raise SystemExit(f"{pack_path}: not a PZPK pack")
-        _version, pages = struct.unpack("<II", f.read(8))
-        for _ in range(pages):
-            read_string(f)
-            count, _alpha = struct.unpack("<II", f.read(8))
-            entries = []
-            for _ in range(count):
-                name = read_string(f)
-                entries.append((name, struct.unpack("<8I", f.read(32))))
-            (size,) = struct.unpack("<I", f.read(4))
-            hits = [e for e in entries if e[0] in wanted]
-            if not hits:
-                f.seek(size, 1)
-                continue
-            page = Image.open(io.BytesIO(f.read(size))).convert("RGBA")
-            for name, (x, y, w, h, ox, oy, full_w, full_h) in hits:
-                tile = Image.new("RGBA", (full_w, full_h), (0, 0, 0, 0))
-                tile.paste(page.crop((x, y, x + w, y + h)), (ox, oy))
-                found[name] = tile
-    missing = wanted - found.keys()
-    if missing:
-        raise SystemExit(f"sprites not found in {pack_path}: {sorted(missing)}")
-    return found
-
-
 def mix(a, b, amount):
     return tuple(a[i] + (b[i] - a[i]) * amount for i in range(3))
 
@@ -296,11 +257,7 @@ def draw_shadow(layer, foot, style):
 
 
 def new_layer():
-    return Image.new("RGBA", (TILE_W * SUPERSAMPLE, TILE_H * SUPERSAMPLE), (0, 0, 0, 0))
-
-
-def shrink(layer):
-    return layer.resize((TILE_W, TILE_H), Image.LANCZOS)
+    return pzart.new_layer(SUPERSAMPLE)
 
 
 def paint_barrel(style):
@@ -356,50 +313,6 @@ def write_icon(folder, tile, name):
     icon.save(folder / f"Item_{name}.png")
 
 
-def write_pack(path, tiles):
-    """tiles maps tile index -> full-size RGBA image."""
-    page = Image.new("RGBA", (PAGE_SIZE, PAGE_SIZE), (0, 0, 0, 0))
-    entries = []
-    x = y = row_height = 0
-    for index, tile in sorted(tiles.items()):
-        ox, oy, right, bottom = tile.getbbox()
-        image = tile.crop((ox, oy, right, bottom))
-        if x + image.width > PAGE_SIZE:
-            x, y, row_height = 0, y + row_height, 0
-        if y + image.height > PAGE_SIZE:
-            raise SystemExit("tiles do not fit on one page; raise PAGE_SIZE")
-        page.paste(image, (x, y))
-        entries.append((f"{TILESET}_{index}", (x, y, image.width, image.height, ox, oy, tile.width, tile.height)))
-        x += image.width
-        row_height = max(row_height, image.height)
-
-    png = io.BytesIO()
-    page.save(png, "PNG")
-    with open(path, "wb") as out:
-        out.write(b"PZPK")
-        out.write(struct.pack("<II", 1, 1))
-        write_string(out, NAME + "0")
-        out.write(struct.pack("<II", len(entries), 1))
-        for name, values in entries:
-            write_string(out, name)
-            out.write(struct.pack("<8I", *values))
-        out.write(struct.pack("<I", len(png.getvalue())))
-        out.write(png.getvalue())
-
-
-def write_tiles(path):
-    with open(path, "wb") as out:
-        out.write(b"tdef")
-        out.write(struct.pack("<II", 1, 1))
-        out.write(f"{TILESET}\n{TILESET}.png\n".encode("utf8"))
-        out.write(struct.pack("<IIII", COLUMNS, ROWS, 1, COLUMNS * ROWS))
-        for index in range(COLUMNS * ROWS):
-            props = TILE_PROPS.get(index, [])
-            out.write(struct.pack("<I", len(props)))
-            for key, value in props:
-                out.write(f"{key}\n{value}\n".encode("utf8"))
-
-
 def main():
     default_game = Path.home() / ".local/share/Steam/steamapps/common/ProjectZomboid/projectzomboid"
     game = Path(sys.argv[1]) if len(sys.argv) > 1 else default_game
@@ -407,15 +320,15 @@ def main():
     (media / "texturepacks").mkdir(parents=True, exist_ok=True)
 
     names = [f"{GENERATOR_PREFIX}{i}" for i in range(GENERATOR_SPRITES)]
-    sprites = extract_sprites(game / "media/texturepacks/Tiles2x.pack", set(names))
+    sprites = pzart.extract_sprites(game / "media/texturepacks/Tiles2x.pack", set(names))
     tiles = {0: paint_barrel(STANDARD)}
     for style in STYLES:
         for i, name in enumerate(names):
             tiles[style["overlay_base"] + i] = paint_generator(sprites[name], style)
-    write_pack(media / "texturepacks" / f"{NAME}.pack", tiles)
+    pzart.write_pack(media / "texturepacks" / f"{NAME}.pack", tiles, NAME, TILESET, PAGE_SIZE)
     for style in STYLES:
         write_icon(media / "textures", paint_barrel(style), style["name"])
-    write_tiles(media / f"{NAME}.tiles")
+    pzart.write_tiles(media / f"{NAME}.tiles", [(TILESET, COLUMNS, ROWS)], TILE_PROPS)
     print(f"wrote {NAME}.pack and {NAME}.tiles to {media}")
 
 
