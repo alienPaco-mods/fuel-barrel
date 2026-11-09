@@ -10,7 +10,7 @@ Copy this folder to `~/Zomboid/mods/FuelBarrel`. The game does not follow a syml
 
 1. **Craft a Fuel Barrel** (Metalworking, Welding 6): welding mask (kept), 4 blowtorch uses, 4 sheet metal, 4 welding rods. It is an inventory item that holds 120 L of any liquid by default.
    Or craft a **Crude Fuel Barrel** at Welding 4: welding mask (kept), 2 blowtorch uses, 2 sheet metal, 2 welding rods. It holds 60 L by default and works the same way.
-2. Right-click a generator with the barrel, a rubber hose and pliers in your inventory and choose **Connect Fuel Barrel**, either directly or in the **Generator** submenu. The barrel and hose are used up, and the pliers are kept. The barrel must be empty or hold only gasoline.
+2. Right-click a generator with a rubber hose and pliers in your inventory and choose **Connect Fuel Barrel**, either directly or in the **Generator** submenu. The barrel can be in your inventory or on the ground on the generator's square or one of the eight around it (same floor). A carried barrel is used first. The barrel and hose are used up, and the pliers are kept. The barrel must be empty or hold only gasoline.
 3. The generator's sprite changes to show the barrel, and the barrel keeps the generator's 10 L tank topped up. The barrel level appears in the generator's info window.
 4. Fill the connected barrel from the **Fuel Barrel** submenu when you right-click the generator.
 5. **Disconnect Fuel Barrel**, in the same submenu, gives you the barrel and hose back, at the size it was crafted with. It also needs pliers, which are kept. The barrel must be completely empty first, and the generator can't be picked up while a barrel is connected.
@@ -33,6 +33,7 @@ Copy this folder to `~/Zomboid/mods/FuelBarrel`. The game does not follow a syml
 - A connected barrel only accepts gasoline. A barrel contaminated before this rule existed will not feed until it is emptied.
 - If the generator runs out while you are away, the barrel pays for the missed hours and restarts it a moment after you return.
 - Destroying a generator loses the connected barrel and its contents.
+- Fuel weighs 1 per litre, on top of the barrel (15, Crude 8). A loaded barrel may be too heavy to pick up, which is why it can be connected from the ground. Vanilla's pump only fills carried containers, up to your free carrying room. A trunk counts the fuel against its capacity.
 - `tiledef` number 5128 must be unique among your active mods.
 - Multiplayer is not supported. This mod is singleplayer only for now.
 
