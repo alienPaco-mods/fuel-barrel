@@ -126,6 +126,8 @@ end
 
 Events.OnFillWorldObjectContextMenu.Add(onFillMenu)
 
+-- Adds the barrel's level to the generator's info window. Wraps ISGeneratorInfoWindow.getRichText:
+-- compare with vanilla after a game update.
 local vanillaGetRichText = ISGeneratorInfoWindow.getRichText
 
 function ISGeneratorInfoWindow.getRichText(object, displayStats)

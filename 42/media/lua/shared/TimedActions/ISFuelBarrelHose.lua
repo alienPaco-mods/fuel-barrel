@@ -89,6 +89,7 @@ function ISFuelBarrelHose:new(character, generator, pliers, barrel, hose)
     return o
 end
 
+-- A generator carries its barrel's container, so it must be disconnected before it is picked up.
 local vanillaTakeIsValid = ISTakeGenerator.isValid
 
 function ISTakeGenerator:isValid()

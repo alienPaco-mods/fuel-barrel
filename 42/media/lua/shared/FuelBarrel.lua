@@ -24,6 +24,7 @@ local tracked = {}
 -- Generators back from time away, waiting for their first bill before the barrel pays the rest.
 local pending = {}
 
+-- Every vanilla generator sprite, for the map loader.
 function FuelBarrel.generatorSprites()
     local sprites = {}
     for i = 0, GENERATOR_SPRITE_COUNT - 1 do
@@ -55,6 +56,7 @@ function FuelBarrel.findPliers(inventory)
     return inventory:getFirstTagEvalRecurse(ItemTag.PLIERS, notBroken)
 end
 
+-- The connected barrel's container, which lives on the generator. Nil when bare.
 function FuelBarrel.getContainer(generator)
     return generator:getComponent(ComponentType.FluidContainer)
 end
@@ -86,10 +88,12 @@ local function fuelHolder(barrel)
     return barrel
 end
 
+-- The barrel's FluidContainer, wherever it is now (see isOnGround).
 function FuelBarrel.barrelContainer(barrel)
     return fuelHolder(barrel):getComponent(ComponentType.FluidContainer)
 end
 
+-- The barrel item's full type, for an item or one on the ground.
 function FuelBarrel.barrelType(barrel)
     return FuelBarrel.isOnGround(barrel) and barrel:getItem():getFullType() or barrel:getFullType()
 end
@@ -110,6 +114,7 @@ function FuelBarrel.findGroundBarrel(generator, itemType)
     end
 end
 
+-- Only an empty barrel or one of pure petrol can be connected.
 function FuelBarrel.holdsOnlyFuel(container)
     return container:isEmpty() or container:isPureFluid(Fluid.Petrol)
 end
@@ -120,6 +125,7 @@ local function overlayName(generator)
     return index and TILESET_PREFIX .. (index + FuelBarrel.typeOf(generator).overlayBase) or nil
 end
 
+-- Shows the barrel on the generator while one is connected.
 function FuelBarrel.refreshSprite(generator)
     generator:setOverlaySprite(FuelBarrel.isAttached(generator) and overlayName(generator) or nil)
 end
@@ -148,6 +154,8 @@ local function noteTimeAway(generator, entry)
     entry.tankWhenLoaded = generator:getFuel()
 end
 
+-- Called by the map loader for every generator, and after attach. A connected one is fed from then on,
+-- and one back from time away waits for its first bill (pending) before the barrel tops it up.
 function FuelBarrel.track(generator)
     if not FuelBarrel.isAttached(generator) then
         -- Drop the barrel overlay of one whose container is gone.
@@ -166,6 +174,7 @@ function FuelBarrel.track(generator)
     FuelBarrel.refreshSprite(generator)
 end
 
+-- Moves the barrel's FluidContainer, fuel and all, onto the generator. The caller removes the barrel item.
 function FuelBarrel.attach(generator, barrel)
     local modData = generator:getModData()
     modData.fuelBarrel = true
@@ -176,6 +185,7 @@ function FuelBarrel.attach(generator, barrel)
     FuelBarrel.track(generator)
 end
 
+-- Removes the generator's container. The caller hands back a fresh barrel of the same capacity.
 function FuelBarrel.detach(generator)
     GameEntityFactory.RemoveComponentType(generator, ComponentType.FluidContainer)
     local modData = generator:getModData()
@@ -188,6 +198,7 @@ function FuelBarrel.detach(generator)
     pending[generator] = nil
 end
 
+-- Tops the generator's tank up from the barrel.
 function FuelBarrel.feed(generator)
     local container = FuelBarrel.getContainer(generator)
     if not container or container:isEmpty() or not container:isPureFluid(Fluid.Petrol) then return end
@@ -245,6 +256,7 @@ local function update(generator)
     generator:getModData().fuelBarrelLastFed = worldHours()
 end
 
+-- Every minute: feeds each loaded connected generator and forgets the unloaded ones.
 function FuelBarrel.feedAll()
     for generator in pairs(tracked) do
         if not isLoaded(generator) then
@@ -257,6 +269,8 @@ function FuelBarrel.feedAll()
     end
 end
 
+-- Every tick, for the few generators just back from time away: once the engine has billed the tank,
+-- the barrel pays what the tank couldn't.
 function FuelBarrel.recoverAll()
     for generator, entry in pairs(pending) do
         entry.ticks = entry.ticks - 1
