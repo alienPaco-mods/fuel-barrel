@@ -1,5 +1,6 @@
 -- Runs FuelBarrel.lua through unload and reload cycles against a model of IsoGenerator's billing.
 -- Run from the mod folder: luajit tests/test_unload.lua
+local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
 local now = 1000
 local cellSquares = {}
 Events = setmetatable({}, { __index = function() return { Add = function() end } end })
@@ -17,10 +18,7 @@ dofile("42/media/lua/shared/FuelBarrel.lua")
 local BURN = 0.5 -- litres per hour
 local FRAMES_PER_MINUTE = 4
 
-local function check(name, condition)
-    print((condition and "ok   " or "FAIL ") .. name)
-    if not condition then os.exit(1) end
-end
+local check = H.check
 
 local function newContainer()
     local c = { amount = 0 }
@@ -126,4 +124,4 @@ cellSquares[1] = nil
 FuelBarrel.feedAll()
 check("an unloaded generator isn't fed", state.fuel == 5 and state.container.amount == 50)
 
-print("all passed")
+H.done()

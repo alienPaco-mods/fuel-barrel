@@ -1,13 +1,11 @@
 -- Checks the barrel rules outside the game. Run from the mod folder: luajit tests/test_barrel.lua
+local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
 Events = setmetatable({}, { __index = function() return { Add = function() end } end })
 Fluid = { Petrol = "petrol" }
 ComponentType = { FluidContainer = "fluid" }
 dofile("42/media/lua/shared/FuelBarrel.lua")
 
-local function check(name, condition)
-    print((condition and "ok   " or "FAIL ") .. name)
-    if not condition then os.exit(1) end
-end
+local check = H.check
 
 local function barrel(fullType)
     local item = { capacity = 0 }
@@ -82,4 +80,4 @@ check("or still on the item if it never moved", FuelBarrel.barrelContainer(older
 local carried = { getFullType = function() return "FuelBarrel.FuelBarrel" end, getComponent = function() return "carried" end }
 check("a carried barrel is not on the ground", not FuelBarrel.isOnGround(carried) and FuelBarrel.barrelContainer(carried) == "carried")
 
-print("all passed")
+H.done()
