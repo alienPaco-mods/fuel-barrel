@@ -1,5 +1,5 @@
 -- Checks the barrel rules outside the game. Run from the mod folder: luajit tests/test_barrel.lua
-local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
+local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 Events = setmetatable({}, { __index = function() return { Add = function() end } end })
 Fluid = { Petrol = "petrol" }
 ComponentType = { FluidContainer = "fluid" }

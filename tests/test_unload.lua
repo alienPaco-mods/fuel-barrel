@@ -1,6 +1,6 @@
 -- Runs FuelBarrel.lua through unload and reload cycles against a model of IsoGenerator's billing.
 -- Run from the mod folder: luajit tests/test_unload.lua
-local H = dofile((os.getenv("TPCORE") or "../_tpcore") .. "/tests/harness.lua")
+local H = dofile((os.getenv("TPCORE") or "../TraditionalPreservationCore") .. "/tests/harness.lua")
 local now = 1000
 local cellSquares = {}
 Events = setmetatable({}, { __index = function() return { Add = function() end } end })
